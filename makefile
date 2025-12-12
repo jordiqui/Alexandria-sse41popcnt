@@ -85,15 +85,31 @@ ifeq ($(build), native)
 endif
 
 ifeq ($(build), x86-64)
-	NATIVE       = -mtune=znver1
-	INSTRUCTIONS = -msse -msse2 -mpopcnt
-	ARCH         = -x86-64
+        NATIVE       = -mtune=znver1
+        INSTRUCTIONS = -msse -msse2 -mpopcnt
+        ARCH         = -x86-64
+        CXXFLAGS    += $(INSTRUCTIONS)
 endif
 
 ifeq ($(build), x86-64-modern)
-	NATIVE       = -mtune=znver2
-	INSTRUCTIONS = -m64 -msse -msse3 -mpopcnt
-	ARCH         = -x86-64-modern
+        NATIVE       = -mtune=znver2
+        INSTRUCTIONS = -m64 -msse -msse3 -mpopcnt
+        ARCH         = -x86-64-modern
+        CXXFLAGS    += $(INSTRUCTIONS)
+endif
+
+ifeq ($(build), x86-64-sse41-popcnt)
+        NATIVE       = -mtune=znver1
+        INSTRUCTIONS = -msse4.1 -mpopcnt
+        ARCH         = -x86-64-sse41-popcnt
+        CXXFLAGS    += $(INSTRUCTIONS)
+endif
+
+ifeq ($(build), x86-64-ssse3)
+        NATIVE       = -mtune=znver1
+        INSTRUCTIONS = -mssse3
+        ARCH         = -x86-64-ssse3
+        CXXFLAGS    += $(INSTRUCTIONS)
 endif
 
 ifeq ($(build), x86-64-avx2)
