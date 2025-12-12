@@ -22,14 +22,17 @@ CXXFLAGS = -funroll-loops -O3 -flto -fuse-ld=lld -fno-exceptions -std=gnu++2a -D
 endif
 
 # Detect Windows
-ifeq ($(OS), Windows_NT)
-	MKDIR   := mkdir
-else
+# Allow selecting the MinGW-w64 toolchain explicitly. This avoids pulling in
+# the MSYS runtime (msys-2.0.dll) when building on Windows.
 ifeq ($(COMP), MINGW)
-	MKDIR   := mkdir
+        CXX   := x86_64-w64-mingw32-g++
+        MKDIR := mkdir
 else
-	MKDIR   := mkdir -p
-endif
+        ifeq ($(OS), Windows_NT)
+                MKDIR := mkdir
+        else
+                MKDIR := mkdir -p
+        endif
 endif
 
 # Detect Windows
