@@ -4,6 +4,7 @@
 #include "position.h"
 #include <cstdint>
 #include <cstring>
+#include <iostream>
 #include "incbin/incbin.h"
 #include "io.h"
 
@@ -14,12 +15,11 @@
 //     const unsigned char *const gEVALEnd;     // a marker to the end
 //     const unsigned int         gEVALSize;    // the size of the embedded file
 // Note that this does not work in Microsoft Visual Studio.
-#if !defined(_MSC_VER)
+#if !defined(_MSC_VER) && __has_include(EVALFILE)
 INCBIN(EVAL, EVALFILE);
 #else
-const unsigned char gEVALData[1] = {};
-const unsigned char* const gEVALEnd = &gEVALData[1];
-const unsigned int gEVALSize = 1;
+// Fallback stub network used when no NNUE file is available at build time.
+alignas(Network) const Network kDefaultNetwork{};
 #endif
 
 const Network *net;
@@ -28,7 +28,14 @@ const Network *net;
 // invaluable help and the immense patience
 
 void NNUE::init() {
+#if !defined(_MSC_VER) && __has_include(EVALFILE)
     net = reinterpret_cast<const Network*>(gEVALData);
+#else
+    net = &kDefaultNetwork;
+    std::cerr << "Warning: NNUE file '" << EVALFILE
+              << "' not found during compilation. Using a zeroed network; engine strength will be significantly reduced."
+              << std::endl;
+#endif
 }
 
 int NNUE::povActivateAffine(Position *pos, NNUE::FinnyTable* FinnyPointer,  const int side, const int16_t *l1weights) {
