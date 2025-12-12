@@ -1,14 +1,28 @@
  ## Building
- Clone the Alexandria repository.
+Clone the Alexandria repository.
 ```bash
 $ git clone https://github.com/PGG106/Alexandria
 $ cd alexandria
 ```
 Download the latest neural network for Alexandria from this [repository](https://github.com/PGG106/Alexandria-networks/releases) and save it in the source root as `nn.net`.
 ```bash
-$ make 
+$ make
 $ ./Alexandria
 ```
+
+### Notes for Windows builds
+
+If you see an error about a missing `msys-2.0.dll` when running the binary, it means the executable was linked against the MSYS runtime. Build from the MinGW shell instead (or set `COMP=MINGW` so the makefile picks the MinGW-w64 compiler), for example:
+
+```bash
+# From the MSYS2 MinGW 64-bit shell
+pacman -S --needed base-devel mingw-w64-x86_64-toolchain make
+git clone https://github.com/PGG106/Alexandria
+cd Alexandria
+make COMP=MINGW build=x86-64-sse41-popcnt
+```
+
+This links a portable Windows executable that does not require MSYS runtimes at launch.
  ## How to use the engine
 
 The Universal Chess Interface (UCI) is a standard protocol used to communicate with
