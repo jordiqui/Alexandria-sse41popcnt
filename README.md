@@ -20,6 +20,9 @@ pacman -S --needed base-devel mingw-w64-x86_64-toolchain make
 git clone https://github.com/PGG106/Alexandria
 cd Alexandria
 make COMP=MINGW build=x86-64-sse41-popcnt
+
+# Alias accepted as well:
+make COMP=MINGW build=x86-64-sse41popcnt
 ```
 
 This links a portable Windows executable that does not require MSYS runtimes at launch.
