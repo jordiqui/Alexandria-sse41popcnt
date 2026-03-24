@@ -27,8 +27,18 @@ endif
 ifeq ($(COMP), MINGW)
         CXX   := x86_64-w64-mingw32-g++
         MKDIR := mkdir
+ codex/apply-commit-f65f76c-vvkepf
         # Some MinGW GCC toolchains fail with LTO-related flags.
         CXXFLAGS := $(filter-out -flto -flto-partition=one,$(CXXFLAGS))
+=======
+ codex/apply-commit-f65f76c-awj149
+        # Some MinGW GCC toolchains fail with LTO-related flags.
+        CXXFLAGS := $(filter-out -flto -flto-partition=one,$(CXXFLAGS))
+=======
+        # Some MinGW GCC toolchains reject -flto-partition=one.
+        CXXFLAGS := $(filter-out -flto-partition=one,$(CXXFLAGS))
+ master
+ master
 else
         ifeq ($(OS), Windows_NT)
                 MKDIR := mkdir
