@@ -27,6 +27,8 @@ endif
 ifeq ($(COMP), MINGW)
         CXX   := x86_64-w64-mingw32-g++
         MKDIR := mkdir
+        # Some MinGW GCC toolchains reject -flto-partition=one.
+        CXXFLAGS := $(filter-out -flto-partition=one,$(CXXFLAGS))
 else
         ifeq ($(OS), Windows_NT)
                 MKDIR := mkdir
