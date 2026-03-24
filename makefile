@@ -27,6 +27,8 @@ endif
 ifeq ($(COMP), MINGW)
         CXX   := x86_64-w64-mingw32-g++
         MKDIR := mkdir
+        # Some MinGW GCC toolchains fail with LTO-related flags.
+        CXXFLAGS := $(filter-out -flto -flto-partition=one,$(CXXFLAGS))
 else
         ifeq ($(OS), Windows_NT)
                 MKDIR := mkdir
@@ -102,6 +104,14 @@ ifeq ($(build), x86-64-modern)
 endif
 
 ifeq ($(build), x86-64-sse41-popcnt)
+        NATIVE       = -mtune=znver1
+        INSTRUCTIONS = -msse4.1 -mpopcnt
+        ARCH         = -x86-64-sse41-popcnt
+        CXXFLAGS    += $(INSTRUCTIONS)
+endif
+
+# Backward-compatible alias without the extra dash between sse41 and popcnt.
+ifeq ($(build), x86-64-sse41popcnt)
         NATIVE       = -mtune=znver1
         INSTRUCTIONS = -msse4.1 -mpopcnt
         ARCH         = -x86-64-sse41-popcnt
